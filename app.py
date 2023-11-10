@@ -38,7 +38,7 @@ if st.session_state["messages"]:
 
     for message in reversed(messages[1:]): 
         speaker = "🙂"
-        if message.role == "assistant":
+        if hasattr(message, "role") and message.role == "assistant":
             speaker="🤖"
 
         st.write(speaker + ": " + message.content)
