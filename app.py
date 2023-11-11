@@ -27,7 +27,11 @@ def communicate():
     messages.append(bot_message)
 
     # Display the bot's response
-    st.write("🤖: " + bot_message.message)
+    if hasattr(bot_message, "message"):
+        st.write("🤖: " + bot_message.message)
+    else:
+        st.write("🤖: ")  # Use an empty string if there is no message
+
 
     st.session_state["user_input"] = ""
 
