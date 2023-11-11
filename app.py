@@ -33,7 +33,14 @@ if st.session_state["messages"]:
     messages = st.session_state["messages"]
 
     for message in reversed(messages[1:]):
-        speaker = "🙂"  # Default emoji for the user
-        if isinstance(message, dict) and message["role"] == "assistant":
-            speaker = "🤖"  # Set emoji to robot for assistant's messages
-            st.write(speaker + ": " + message["content"])
+        speaker = "🙂"
+        if hasattr(message, "role") and message.role == "assistant":
+            speaker = "🤖"
+
+        if isinstance(message, dict):
+            if message["role"] == "user":
+                st.write(speaker + ": " + message["content"])
+            else:
+                st.write(speaker + ": " + message.content)
+        else:
+            st.write(message)
