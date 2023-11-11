@@ -41,4 +41,7 @@ if st.session_state["messages"]:
             speaker="🤖"
 
         if hasattr(message, "content"):
-            st.write(speaker + ": " + message.content)
+            if message["role"] == "user":
+                st.write(speaker + ": " + message["content"])
+            else:
+                st.write(speaker + ": " + message.content)
