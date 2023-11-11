@@ -17,17 +17,23 @@ def communicate():
     user_message = {"role": "user", "content": st.session_state["user_input"]}
     messages.append(user_message)
 
-    # Display the user's input message
-    st.write("🙂: " + user_message["content"])
+
 
     response = client.chat.completions.create(model="gpt-3.5-turbo",
                                              messages=messages
                                              )
     bot_message = response.choices[0].message
     messages.append(bot_message)
-
+    
+    # Display the user's input message
+    st.write("🙂: " + user_message["content"])
+    
     # Display the bot's response
-    st.write("🤖: " + bot_message)
+    if hasattr(bot_message, "message"):
+        st.write("🤖: " + bot_message.message)
+    else:
+        st.write("🤖: ")  # Use an empty string if there is no message
+
 
     st.session_state["user_input"] = ""
 
