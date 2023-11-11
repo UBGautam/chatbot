@@ -28,21 +28,18 @@ def communicate():
 
 
 # User Interface
-st.title("Trip Adviser AI")
-st.write("Utilizing the ChatGPT API, this chatbot offers advanced conversational capabilities.")
-
-user_input = st.text_input("please enter a message here.", key="user_input", on_change=communicate)
-
 if st.session_state["messages"]:
     messages = st.session_state["messages"]
 
-    for message in reversed(messages[1:]): 
-        speaker = "🙂"
-        if hasattr(message, "role") and message.role == "assistant":
-            speaker="🤖"
+    for message in reversed(messages[1:]):
+        if hasattr(message, "role"):
+            speaker = "🙂"
+            if message.role == "assistant":
+                speaker = "🤖"
 
-        if hasattr(message, "content"):
-            st.write(speaker + ": " + message.content)
+            if hasattr(message, "content"):
+                st.write(speaker + ": " + message.content)
+
 
 
 
