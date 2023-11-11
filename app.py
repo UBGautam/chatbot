@@ -18,8 +18,8 @@ def communicate():
     response = client.chat.completions.create(model="gpt-3.5-turbo",
                                               messages=messages
                                               )
-    bot_message = response.choices[0].message
-    messages.append(bot_message)
+    bot_message = response.choices[0]
+    messages.append({"role": "assistant", "content": bot_message.content})
 
     st.session_state["user_input"] = ""
 
@@ -34,13 +34,10 @@ if st.session_state["messages"]:
 
     for message in reversed(messages[1:]):
         speaker = "🙂"
-        if hasattr(message, "role") and message.role == "assistant":
+        if message["role"] == "assistant":
             speaker = "🤖"
 
-        if isinstance(message, dict):
-            if message["role"] == "user":
-                st.write(speaker + ": " + message["content"])
-            else:
-                st.write(speaker + ": " + message.content)
-        else:
-            st.write(message)
+        # Extract the message content from the ChatCompletionMessage
+        message_content = message["content"] if isinstance(message, dict) else message
+
+        st.write(speaker + ": " + message_content)
