@@ -17,7 +17,13 @@ def communicate():
     response = client.chat.completions.create(model="gpt-3.5-turbo",
                                                messages=messages)
     bot_message = response.choices[0]
-    message_content = bot_message.content
+
+    # Check for 'text' attribute instead of 'content'
+    if hasattr(bot_message, 'text'):
+        message_content = bot_message.text
+    else:
+        # Handle the case where neither 'content' nor 'text' exists
+        raise AttributeError("Unable to extract message content from bot response")
 
     # Format the bot's response with the desired emoji
     formatted_response = "🤖: " + message_content
@@ -25,6 +31,7 @@ def communicate():
     messages.append({"role": "assistant", "content": formatted_response})
 
     st.session_state["user_input"] = ""
+
 
 
 st.title("Trip Adviser AI")
