@@ -35,5 +35,8 @@ if st.session_state["messages"]:
     messages = st.session_state["messages"]
 
     for message in reversed(messages):
-        speaker = "🙂" if message["role"] == "user" else "🤖"
-        st.write(speaker + ": " + message["content"])
+        if isinstance(message, dict):
+            speaker = "🙂" if message["role"] == "user" else "🤖"
+            st.write(speaker + ": " + message["content"])
+        else:
+            st.write("🤖: " + message.content)
