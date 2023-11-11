@@ -18,9 +18,15 @@ def communicate():
     response = client.chat.completions.create(model="gpt-3.5-turbo",
                                                messages=messages)
     bot_message = response.choices[0]
-    messages.append({"role": "assistant", "content": bot_message.content})
+    
+    # Extract the message content from the Choice object's message attribute
+    if hasattr(bot_message, "message"):
+        messages.append({"role": "assistant", "content": bot_message.message.content})
+    else:
+        messages.append({"role": "assistant", "content": bot_message})
 
     st.session_state["user_input"] = ""
+
 
 
 st.title("Trip Adviser AI")
