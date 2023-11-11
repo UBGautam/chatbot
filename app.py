@@ -18,7 +18,7 @@ def communicate():
     messages.append(user_message)
 
     # Display the user's input message
-    st.write("You: " + user_message["content"])
+    st.write("🙂: " + user_message["content"])
 
     response = client.chat.completions.create(model="gpt-3.5-turbo",
                                              messages=messages
@@ -27,11 +27,7 @@ def communicate():
     messages.append(bot_message)
 
     # Display the bot's response
-    if hasattr(bot_message, "message"):
-        st.write("🤖: " + bot_message.message)
-    else:
-        st.write("🤖: ")  # Use an empty string if there is no message
-
+    st.write("🤖: " + bot_message)
 
     st.session_state["user_input"] = ""
 
@@ -49,5 +45,6 @@ if st.session_state["messages"]:
         if hasattr(message, "role") and message.role == "assistant":
             speaker = "🤖"
 
+        # Check if the message has a content attribute before trying to access it.
         if hasattr(message, "content"):
             st.write(speaker + ": " + message.content)
