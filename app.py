@@ -17,8 +17,8 @@ def communicate():
 
     response = client.chat.completions.create(model="gpt-3.5-turbo",
                                                messages=messages)
-    bot_message = response.choices[0].message
-    messages.append({"role": "assistant", "content": bot_message})
+    bot_message = response.choices[0]
+    messages.append({"role": "assistant", "content": bot_message.content})
 
     st.session_state["user_input"] = ""
 
@@ -38,5 +38,9 @@ if st.session_state["messages"]:
 
         # Extract the message content from the ChatCompletionMessage
         message_content = message["content"] if isinstance(message, dict) else message
+
+        # Check if message_content is a ChatCompletionMessage object
+        if isinstance(message_content, ChatCompletionMessage):
+            message_content = message_content.content
 
         st.write(speaker + ": " + message_content)
