@@ -1,44 +1,49 @@
-1  import streamlit as st
-2  from openai import OpenAI
+import streamlit as st
+from openai import OpenAI
 
-3  client = OpenAI(api_key=st.secrets.OpenAIAPI.openai_api_key)
-4  # Obtaining the OpenAI API key from Streamlit Community Cloud's 'Secrets'.
+client = OpenAI(api_key=st.secrets.OpenAIAPI.openai_api_key)
+# Obtaining the OpenAI API key from Streamlit Community Cloud's 'Secrets'.
 
-5  # Using st.session_state to store the exchange of messages.
-6  if "messages" not in st.session_state:
-7      st.session_state["messages"] = [
-8          {"role": "system", "content": "You are a trip adviser assistant AI."}
-9      ]
+# Using st.session_state to store the exchange of messages.
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [
+        {"role": "system", "content": "You are a trip adviser assistant AI."}
+    ]
 
-10  # Function for interacting with a chatbot.
-11  def communicate():
-12      messages = st.session_state["messages"]
+# Function for interacting with a chatbot.
+def communicate():
+    messages = st.session_state["messages"]
 
-13      user_message = {"role": "user", "content": st.session_state["user_input"]}
-14      st.write("You: " + user_message["content"])  # Added line to display user input
-15      messages.append(user_message)
+    user_message = {"role": "user", "content": st.session_state["user_input"]}
+    messages.append(user_message)
 
-16      response = client.chat.completions.create(model="gpt-3.5-turbo",
-17                                              messages=messages
-18                                              )
-19      bot_message = response.choices[0].message
-20      messages.append(bot_message)
+    # Display the user's input message
+    st.write("You: " + user_message["content"])
 
-21      st.session_state["user_input"] = ""
+    response = client.chat.completions.create(model="gpt-3.5-turbo",
+                                             messages=messages
+                                             )
+    bot_message = response.choices[0].message
+    messages.append(bot_message)
+
+    # Display the bot's response
+    st.write("🤖: " + bot_message)
+
+    st.session_state["user_input"] = ""
 
 # User Interface
-22  st.title("Trip Adviser AI")
-23  st.write("Utilizing the ChatGPT API, this chatbot offers advanced conversational capabilities.")
+st.title("Trip Adviser AI")
+st.write("Utilizing the ChatGPT API, this chatbot offers advanced conversational capabilities.")
 
-24  user_input = st.text_input("please enter a message here.", key="user_input", on_change=communicate)
+user_input = st.text_input("please enter a message here.", key="user_input", on_change=communicate)
 
-25  if st.session_state["messages"]:
-26      messages = st.session_state["messages"]
+if st.session_state["messages"]:
+    messages = st.session_state["messages"]
 
-27      for message in reversed(messages[1:]):
-28          speaker = "🙂"
-29          if hasattr(message, "role") and message.role == "assistant":
-30              speaker = "🤖"
+    for message in reversed(messages[1:]):
+        speaker = "🙂"
+        if hasattr(message, "role") and message.role == "assistant":
+            speaker = "🤖"
 
-31          if hasattr(message, "content"):
-32              st.write(speaker + ": " + message.content)
+        if hasattr(message, "content"):
+            st.write(speaker + ": " + message.content)
