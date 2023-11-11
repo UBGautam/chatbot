@@ -27,7 +27,7 @@ def communicate():
     messages.append(bot_message)
 
     # Display the bot's response
-    st.write("🤖: " + bot_message)
+    st.write("🤖: " + bot_message.message)
 
     st.session_state["user_input"] = ""
 
