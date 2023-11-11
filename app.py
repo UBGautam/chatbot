@@ -34,7 +34,7 @@ user_input = st.text_input("Please enter a message here.", key="user_input", on_
 if st.session_state["messages"]:
     messages = st.session_state["messages"]
 
-    for message in reversed(messages):
+    for message in reversed(messages[1:]):
         if isinstance(message, dict):
             speaker = "🙂" if message["role"] == "user" else "🤖"
             st.write(speaker + ": " + message["content"])
